@@ -15,6 +15,8 @@
 	export let message: ChatMessage;
 	export let renderChildren = false;
 
+	let showRaw = false;
+
 	async function modalConfirmDelete(id?: string) {
 		if (!id) {
 			return;
@@ -51,6 +53,10 @@
 		<!-- Author -->
 		<span class="font-bold">{message.role === 'user' ? 'You' : 'AI'}:</span>
 
+		<!-- Toggle raw -->
+		<button class="btn btn-sm" on:click={() => (showRaw = !showRaw)}>
+			{showRaw ? 'Hide' : 'Show'} raw
+		</button>
 		<div class="flex space-x-4">
 			<!-- Tokens -->
 			<TokenCost tokens={countTokens(message)} />
@@ -74,7 +80,11 @@
 
 	<!-- Message Content -->
 	<div>
+		{#if showRaw}
+		{message.content}
+		{:else}
 		{@html snarkdown(message.content)}
+		{/if}
 	</div>
 </div>
 
