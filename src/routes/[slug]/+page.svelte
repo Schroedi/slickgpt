@@ -234,20 +234,20 @@
 				<svelte:fragment slot="actions">
 					{#if hasContext}
 						<!-- Tokens -->
-						<div class="justify-self-end mb-2">
+						<!-- <div class="justify-self-end mb-2">
 							<TokenCost tokens={countTokens(chat.contextMessage)} />
-						</div>
+						</div> -->
 					{/if}
 					<div class="flex flex-row md:flex-col space-x-2 space-y-2">
 						<button
-							class="btn self-center variant-filled-primary"
+							class="btn btn-sm self-center variant-filled-primary"
 							on:click={() => showModalComponent('ContextModal', { slug })}
 						>
 							Edit
 						</button>
 						{#if hasContext}
 							<button
-								class="btn self-center variant-filled-tertiary"
+								class="btn btn-sm self-center variant-filled-tertiary"
 								on:click={() =>
 									createNewChat({ context: chat.contextMessage.content, settings: chat.settings })}
 							>
