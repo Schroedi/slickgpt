@@ -86,9 +86,9 @@
 
 	<slot />
 
-	<svelte:fragment slot="footer">
+	<!-- <svelte:fragment slot="footer">
 		<Footer />
-	</svelte:fragment>
+	</svelte:fragment> -->
 </AppShell>
 
 <!-- Skeleton Singletons: -->
