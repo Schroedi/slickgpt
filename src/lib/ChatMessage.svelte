@@ -1,13 +1,15 @@
 <script lang="ts">
 	import type { ChatMessage } from '$misc/shared';
 	import { createEventDispatcher } from 'svelte';
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, clipboard } from '@skeletonlabs/skeleton';
 	import snarkdown from 'snarkdown';
-	import { XMark, PencilSquare } from '@inqling/svelte-icons/heroicon-24-solid';
+	import { XMark, PencilSquare, Clipboard, ClipboardDocument, ClipboardDocumentCheck, ClipboardDocumentList } from '@inqling/svelte-icons/heroicon-24-solid';
 	import { chatStore } from '$misc/stores';
 	import { countTokens } from '$misc/openai';
 	import TokenCost from './TokenCost.svelte';
 	import ChatMessages from './ChatMessages.svelte';
+	import SvelteMarkdown from 'svelte-markdown'
+	import { textareaAutosizeAction } from 'svelte-legos';
 
 	const dispatch = createEventDispatcher();
 
@@ -16,6 +18,7 @@
 	export let renderChildren = false;
 
 	let showRaw = false;
+	let showNewMD = true;
 
 	async function modalConfirmDelete(id?: string) {
 		if (!id) {
@@ -57,9 +60,15 @@
 		<button class="btn btn-sm" on:click={() => (showRaw = !showRaw)}>
 			{showRaw ? 'Hide' : 'Show'} raw
 		</button>
+		<button class="btn btn-sm" on:click={() => (showNewMD = !showNewMD)}>
+			{showNewMD ? 'Hide' : 'Show'} rend v2
+		</button>
 		<div class="flex space-x-4">
 			<!-- Tokens -->
-			<TokenCost tokens={countTokens(message)} />
+			<!-- <TokenCost tokens={countTokens(message)} /> -->
+			<button class="btn btn-sm" use:clipboard={message.content}>
+				<ClipboardDocumentList class="w-6 h-6" />
+			</button>
 
 			{#if $chatStore[slug] && message.id}
 				<div class="flex space-x-0">
@@ -81,7 +90,11 @@
 	<!-- Message Content -->
 	<div>
 		{#if showRaw}
-		{message.content}
+		<!-- text edit to copy the text from -->
+		<textarea value={message.content} class="w-full textarea" />
+		<!-- {message.content} -->
+		{:else if showNewMD}
+		<SvelteMarkdown source={message.content} options={{breaks:true}}/>
 		{:else}
 		{@html snarkdown(message.content)}
 		{/if}
