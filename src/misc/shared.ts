@@ -12,7 +12,6 @@ import vercelAnalytics from '@vercel/analytics';
 
 import { goto } from '$app/navigation';
 import { chatStore, settingsStore } from './stores';
-import { PUBLIC_DISABLE_TRACKING } from '$env/static/public';
 
 export interface ChatMessage extends ChatCompletionRequestMessage {
 	id?: string;
@@ -130,10 +129,7 @@ export function showModalComponent(
 }
 
 export function track(action: string) {
-	if (PUBLIC_DISABLE_TRACKING === 'true') {
-		return;
-	}
-	vercelAnalytics.track(action);
+	
 }
 
 export function showToast(
